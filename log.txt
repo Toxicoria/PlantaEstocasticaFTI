@@ -1,0 +1,3 @@
+iteracion 3 | random: 0.47 | F[-F]F 
+iteracion 3 | random: 0.01 | F[+F]F[-F]F[-F[+F]F[-F]F]F[+F]F[-F]F 
+iteracion 3 | random: 0.13 | F[+F]F[+F[+F]F]F[+F]F[-F[+F]F]F[+F]F[-F[+F]F[+F[+F]F]F[+F]F[-F[+F]F]F[+F]F]F[+F]F[+F[+F]F]F[+F]F[-F[+F]F]F[+F]F 
