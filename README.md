@@ -1,2 +1,6 @@
-# PlantaEstocasticaFTI
-Trabajo practico N°2 FTI
+# plantaEstocastica
+Trabajo final de Fundamentos Teoricos de Informatica
+
+utiliza la biblioteca re
+
+proximamente turtle
