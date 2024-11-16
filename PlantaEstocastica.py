@@ -1,6 +1,10 @@
 import re
+<<<<<<< HEAD
 from random import *
 from turtle import *
+=======
+import random
+>>>>>>> b2e567ae7f54ae322dc730775e5949c937c60ff1
 
 '''intercambios = {
     'prob1': '1F1',
@@ -14,6 +18,11 @@ intercambios = {
     'prob3': 'F[-F]F'
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> b2e567ae7f54ae322dc730775e5949c937c60ff1
 probabilidades = {
     'prob1': 0.333,
     'prob2': 0.33,
@@ -21,7 +30,11 @@ probabilidades = {
 }
 
 def aleatorio():
+<<<<<<< HEAD
     return random()
+=======
+    return random.random()
+>>>>>>> b2e567ae7f54ae322dc730775e5949c937c60ff1
 
 def leerArchivo():
     try:
@@ -78,12 +91,16 @@ def intercambiarVariables(valor, txt, i):
     f.close()
     return txt
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b2e567ae7f54ae322dc730775e5949c937c60ff1
 def iterar(iteraciones, txt):
     for i in range(0, iteraciones): 
        txt = intercambiarVariables(aleatorio(),txt, i)
     return txt
 
+<<<<<<< HEAD
 
 
 
@@ -92,6 +109,9 @@ def iterar(iteraciones, txt):
 
 if __name__ == '__main__':  
     
+=======
+if __name__ == '__main__':
+>>>>>>> b2e567ae7f54ae322dc730775e5949c937c60ff1
     
     txt = leerArchivo()
 
@@ -101,6 +121,7 @@ if __name__ == '__main__':
     if not txt:
         print('Error: No se puede leer el archivo.')
 
+<<<<<<< HEAD
     cadenaFinal = iterar(ingresarIteraciones(), txt)
 
     guardarArchivo(cadenaFinal)
@@ -136,5 +157,8 @@ if __name__ == '__main__':
 
     #hay que hacerlo recursivo, cuando encontramos un ] volvemos a la iteracion anterior
 
+=======
+    guardarArchivo(iterar(ingresarIteraciones(), txt))
+>>>>>>> b2e567ae7f54ae322dc730775e5949c937c60ff1
 
     
