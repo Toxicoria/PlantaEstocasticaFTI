@@ -1,5 +1,12 @@
 import re
-import random
+from random import *
+from turtle import *
+
+'''intercambios = {
+    'prob1': '1F1',
+    'prob2': '2F2',
+    'prob3': '3F3'
+}'''
 
 intercambios = {
     'prob1': 'F[+F]F[-F]F',
@@ -8,24 +15,34 @@ intercambios = {
 }
 
 probabilidades = {
-    'prob1': 0.34,
+    'prob1': 0.333,
     'prob2': 0.33,
-    'prob3': 0.33
+    'prob3': 0.34
 }
 
 def aleatorio():
-    return random.random()
+    return random()
 
 def leerArchivo():
-    with open('inicial.txt', 'r') as f:
-        txt = f.read()
-        f.close()   
-        return txt
+    try:
+        with open('inicial.txt', 'r') as f:
+            txt = f.read()
+            f.close()
+            return txt
+    except FileNotFoundError:
+        with open('inicial.txt', 'w') as f:
+            f.write('F')
+            f.close()
+        return 'F'
 
 def guardarArchivo(txt):
-    with open('final.txt', 'w') as f:
-        f.write(txt)
-        f.close()
+    try:
+        with open('final.txt', 'w') as f:
+            f.write(txt)
+        return True
+    except FileNotFoundError:
+        with open('final.txt', 'w') as f:
+            f.write(txt)
         return True
     
 def ingresarIteraciones():
@@ -40,28 +57,41 @@ def ingresarIteraciones():
         except ValueError:
             print('El numero de iteraciones debe ser un numero entero')
 
-
-
-def iterar(iteraciones, txt):
-    for i in range(0, iteraciones):
-        
-        valor = aleatorio()
-        
+def intercambiarVariables(valor, txt, i):
+    try:
         with open('log.txt', 'a') as f:
-            
-            if valor < probabilidades['prob1']:
-                txt = re.sub('F', intercambios['prob1'], txt)
-            elif valor < (probabilidades['prob1'] + probabilidades['prob2']):
-                txt = re.sub('F', intercambios['prob2'], txt)
-            else:
-                txt = re.sub('F', intercambios['prob3'], txt)
-            
-            f.write('iteracion {i} | random: {valor:.2f} | {txt} \n'.format(i=iteraciones, valor=aleatorio(), txt=txt))
+            pass
+    except FileNotFoundError:
+        with open('log.txt', 'w') as f:
+            f.write('')
+            f.close()
     
+    if valor < probabilidades['prob1']:
+        txt = re.sub('F', intercambios['prob1'], txt)
+    elif valor < (probabilidades['prob1'] + probabilidades['prob2']):
+        txt = re.sub('F', intercambios['prob2'], txt)
+    else:
+        txt = re.sub('F', intercambios['prob3'], txt)
+                
+    with open('log.txt', 'a') as f:
+        f.write('iteracion {i} | random: {valor:.2f} | {txt} \n'.format(i=i, valor=valor, txt=txt))
     f.close()
     return txt
 
-if __name__ == '__main__':
+
+def iterar(iteraciones, txt):
+    for i in range(0, iteraciones): 
+       txt = intercambiarVariables(aleatorio(),txt, i)
+    return txt
+
+
+
+
+
+
+
+if __name__ == '__main__':  
+    
     
     txt = leerArchivo()
 
@@ -71,6 +101,40 @@ if __name__ == '__main__':
     if not txt:
         print('Error: No se puede leer el archivo.')
 
-    guardarArchivo(iterar(ingresarIteraciones(), txt))
+    cadenaFinal = iterar(ingresarIteraciones(), txt)
+
+    guardarArchivo(cadenaFinal)
+
+    print(cadenaFinal[2])
+
+    t = Turtle()
+    t.speed(0)
+
+    posicion = (0,0)
+    angle = 0
+    t.screen.title("hermosa planta estoica")
+    t.setheading(90)
+    
+    
+    for i in cadenaFinal:
+
+        if i == 'F':
+            t.forward(uniform(0.7, 1.2)*10)
+        elif i == '+':
+            t.right(uniform(0, 30))
+        elif i == '-':
+            t.left(uniform(0, 30))
+        elif i == '[':
+            angle = t.heading()
+            posicion = t.position()
+        elif i == ']':
+            t.setheading(angle)
+            t.goto(posicion)
+
+
+    t.screen.mainloop()
+
+    #hay que hacerlo recursivo, cuando encontramos un ] volvemos a la iteracion anterior
+
 
     
