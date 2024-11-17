@@ -1,7 +1,7 @@
 import re
 from random import uniform, random
 from turtle import Screen, Turtle
-import colorsys  # Para generar colores dinámicamente
+import colorsys
 
 intercambios = {
     'prob1': 'F[+F]F[-F]F',
@@ -68,8 +68,8 @@ def iterar(iteraciones, txt):
 
 
 def color_rainbow(paso, total_pasos):
-    hue = paso / total_pasos  # Normalizar el paso
-    r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)  # Convertir HSV a RGB
+    paso = paso / total_pasos  # Normalizar el paso
+    r, g, b = colorsys.hsv_to_rgb(paso, 1.0, 1.0)  # Convertir HSV a RGB
     return r, g, b
 
 
@@ -84,7 +84,7 @@ def dibujo(cadena):
         t.pencolor(color)
 
         if char == 'F':
-            t.forward(uniform(0.7, 1.2) * 10)
+            t.forward(uniform(0.7, 1.2) * 15)
         elif char == '+':
             t.right(uniform(0, 30))
         elif char == '-':
@@ -102,7 +102,7 @@ def dibujo(cadena):
 def conf_turtle(s, t):
     s.setup(width=1.0, height=1.0)
     t.speed(0)
-    t.screen.title("hermosa planta estoica")
+    t.screen.title("NYAN NYAN NYAN NYAN")
     t.setheading(90)  # Hacemos que mire para arriba
     t.pensize(2)
     t.penup()
@@ -113,10 +113,7 @@ def conf_turtle(s, t):
     t.shape("gato.gif")
 
 
-
-if __name__ == '__main__':
-
-    txt = leerArchivo()
+def log(txt):
 
     with open('log.txt', 'w') as f:
         pass
@@ -124,13 +121,17 @@ if __name__ == '__main__':
     if not txt:
         print('Error: No se puede leer el archivo.')
 
-    cadenaFinal = iterar(ingresarIteraciones(), txt)
 
+if __name__ == '__main__':
+
+    txt = leerArchivo()
+
+    log(txt)
+    cadenaFinal = iterar(ingresarIteraciones(), txt)
     guardarArchivo(cadenaFinal)
+
     s = Screen()
     t = Turtle()
     conf_turtle(s, t)
-
     dibujo(cadenaFinal)
-
     t.screen.mainloop()
