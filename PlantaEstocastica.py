@@ -20,8 +20,10 @@ probabilidades = {
     'prob3': 0.34
 }
 
+
 def aleatorio():
     return random()
+
 
 def leerArchivo():
     try:
@@ -35,6 +37,7 @@ def leerArchivo():
             f.close()
         return 'F'
 
+
 def guardarArchivo(txt):
     try:
         with open('final.txt', 'w') as f:
@@ -44,7 +47,8 @@ def guardarArchivo(txt):
         with open('final.txt', 'w') as f:
             f.write(txt)
         return True
-    
+
+
 def ingresarIteraciones():
     while True:
         iteraciones = input('Ingresa el numero de iteraciones: ')
@@ -57,6 +61,7 @@ def ingresarIteraciones():
         except ValueError:
             print('El numero de iteraciones debe ser un numero entero')
 
+
 def intercambiarVariables(valor, txt, i):
     try:
         with open('log.txt', 'a') as f:
@@ -65,33 +70,61 @@ def intercambiarVariables(valor, txt, i):
         with open('log.txt', 'w') as f:
             f.write('')
             f.close()
-    
+
     if valor < probabilidades['prob1']:
         txt = re.sub('F', intercambios['prob1'], txt)
     elif valor < (probabilidades['prob1'] + probabilidades['prob2']):
         txt = re.sub('F', intercambios['prob2'], txt)
     else:
         txt = re.sub('F', intercambios['prob3'], txt)
-                
+
     with open('log.txt', 'a') as f:
         f.write('iteracion {i} | random: {valor:.2f} | {txt} \n'.format(i=i, valor=valor, txt=txt))
     f.close()
     return txt
 
+
 def iterar(iteraciones, txt):
-    for i in range(0, iteraciones): 
-       txt = intercambiarVariables(aleatorio(),txt, i)
+    for i in range(0, iteraciones):
+        txt = intercambiarVariables(aleatorio(), txt, i)
     return txt
 
 
+def dibujo(cadena):
+    stack = []
+    for char in cadena:
+        if char == 'F':
+            t.forward(uniform(0.7, 1.2) * 10)
+        elif char == '+':
+            t.right(uniform(0, 30))
+        elif char == '-':
+            t.left(uniform(0, 30))
+        elif char == '[':
+            angulo = t.heading()
+            posicion = t.position()
+            stack.append((posicion, angulo))
+        elif char == ']':
+            posicion, angulo = stack.pop()
+            t.setheading(angulo)
+            t.goto(posicion)
 
 
+def conf_turtle(s, t):
+    s.setup(width=1.0, height=1.0)
+    s.register_shape("gato.gif")
+    t.shape("gato.gif")
+    t.shapesize(5, 5, 12)
+    t.speed(0)
+    t.screen.title("hermosa planta estoica")
+    t.setheading(90) #Hacemos que mire para arriba
+    t.pensize(2)
+    t.pencolor("white")
+    t.setposition(0, -300)
+    t.pencolor("black")
 
 
+if __name__ == '__main__':
 
-if __name__ == '__main__':  
-    
-    
     txt = leerArchivo()
 
     with open('log.txt', 'w') as f:
@@ -103,37 +136,15 @@ if __name__ == '__main__':
     cadenaFinal = iterar(ingresarIteraciones(), txt)
 
     guardarArchivo(cadenaFinal)
-
-    print(cadenaFinal[2])
-
+    s = Screen()
     t = Turtle()
-    t.speed(0)
+    conf_turtle(s,t)
 
-    posicion = (0,0)
+    posicion = (0, 0)
     angle = 0
-    t.screen.title("hermosa planta estoica")
-    t.setheading(90)
-    
-    
-    for i in cadenaFinal:
 
-        if i == 'F':
-            t.forward(uniform(0.7, 1.2)*10)
-        elif i == '+':
-            t.right(uniform(0, 30))
-        elif i == '-':
-            t.left(uniform(0, 30))
-        elif i == '[':
-            angle = t.heading()
-            posicion = t.position()
-        elif i == ']':
-            t.setheading(angle)
-            t.goto(posicion)
-
+    dibujo(cadenaFinal)
 
     t.screen.mainloop()
 
-    #hay que hacerlo recursivo, cuando encontramos un ] volvemos a la iteracion anterior
-
-
-    
+    # hay que hacerlo recursivo, cuando encontramos un ] volvemos a la iteracion anterior
