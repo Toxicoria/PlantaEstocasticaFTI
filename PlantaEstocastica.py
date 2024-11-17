@@ -1,12 +1,7 @@
 import re
-from random import *
-from turtle import *
-
-'''intercambios = {
-    'prob1': '1F1',
-    'prob2': '2F2',
-    'prob3': '3F3'
-}'''
+from random import uniform, random
+from turtle import Screen, Turtle
+import colorsys  # Para generar colores dinámicamente
 
 intercambios = {
     'prob1': 'F[+F]F[-F]F',
@@ -28,25 +23,16 @@ def aleatorio():
 def leerArchivo():
     try:
         with open('inicial.txt', 'r') as f:
-            txt = f.read()
-            f.close()
-            return txt
+            return f.read()
     except FileNotFoundError:
         with open('inicial.txt', 'w') as f:
             f.write('F')
-            f.close()
         return 'F'
 
 
 def guardarArchivo(txt):
-    try:
-        with open('final.txt', 'w') as f:
-            f.write(txt)
-        return True
-    except FileNotFoundError:
-        with open('final.txt', 'w') as f:
-            f.write(txt)
-        return True
+    with open('final.txt', 'w') as f:
+        f.write(txt)
 
 
 def ingresarIteraciones():
@@ -63,14 +49,6 @@ def ingresarIteraciones():
 
 
 def intercambiarVariables(valor, txt, i):
-    try:
-        with open('log.txt', 'a') as f:
-            pass
-    except FileNotFoundError:
-        with open('log.txt', 'w') as f:
-            f.write('')
-            f.close()
-
     if valor < probabilidades['prob1']:
         txt = re.sub('F', intercambios['prob1'], txt)
     elif valor < (probabilidades['prob1'] + probabilidades['prob2']):
@@ -79,20 +57,32 @@ def intercambiarVariables(valor, txt, i):
         txt = re.sub('F', intercambios['prob3'], txt)
 
     with open('log.txt', 'a') as f:
-        f.write('iteracion {i} | random: {valor:.2f} | {txt} \n'.format(i=i, valor=valor, txt=txt))
-    f.close()
+        f.write(f'Iteración {i} | random: {valor:.2f} | {txt} \n')
     return txt
 
 
 def iterar(iteraciones, txt):
-    for i in range(0, iteraciones):
+    for i in range(iteraciones):
         txt = intercambiarVariables(aleatorio(), txt, i)
     return txt
 
 
+def color_rainbow(paso, total_pasos):
+    hue = paso / total_pasos  # Normalizar el paso
+    r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)  # Convertir HSV a RGB
+    return r, g, b
+
+
 def dibujo(cadena):
     stack = []
+    total_pasos = len(cadena)
+    paso = 0
+
     for char in cadena:
+        paso += 1
+        color = color_rainbow(paso, total_pasos)
+        t.pencolor(color)
+
         if char == 'F':
             t.forward(uniform(0.7, 1.2) * 10)
         elif char == '+':
@@ -111,16 +101,17 @@ def dibujo(cadena):
 
 def conf_turtle(s, t):
     s.setup(width=1.0, height=1.0)
-    s.register_shape("gato.gif")
-    t.shape("gato.gif")
-    t.shapesize(5, 5, 12)
     t.speed(0)
     t.screen.title("hermosa planta estoica")
-    t.setheading(90) #Hacemos que mire para arriba
+    t.setheading(90)  # Hacemos que mire para arriba
     t.pensize(2)
-    t.pencolor("white")
-    t.setposition(0, -300)
-    t.pencolor("black")
+    t.penup()
+    t.goto(0, -300)
+    t.pendown()
+    s.register_shape("gato.gif")
+    s.bgpic("espacio.gif")
+    t.shape("gato.gif")
+
 
 
 if __name__ == '__main__':
@@ -138,13 +129,8 @@ if __name__ == '__main__':
     guardarArchivo(cadenaFinal)
     s = Screen()
     t = Turtle()
-    conf_turtle(s,t)
-
-    posicion = (0, 0)
-    angle = 0
+    conf_turtle(s, t)
 
     dibujo(cadenaFinal)
 
     t.screen.mainloop()
-
-    # hay que hacerlo recursivo, cuando encontramos un ] volvemos a la iteracion anterior
